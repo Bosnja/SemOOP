@@ -1,0 +1,119 @@
+import java.util.Scanner;
+
+public class TicTacToe {
+    private char[][] tabla;
+    private char Igrač;
+
+    public TicTacToe() {
+        tabla = new char[3][3];
+        Igrač = 'X';
+        tabela();
+    }
+
+    private void tabela() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                tabla[i][j] = '-';
+            }
+        }
+    }
+
+    private void printTabela() {
+        System.out.println("-------------");
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(tabla[i][j] + " | ");
+            }
+            System.out.println();
+            System.out.println("-------------");
+        }
+    }
+
+    private boolean TabelaPuna() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tabla[i][j] == '-') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean provjeriPobjedu(char Igrač) {
+
+        for (int i = 0; i < 3; i++) {
+            if (tabla[i][0] == Igrač && tabla[i][1] == Igrač && tabla[i][2] == Igrač) {
+                return true;
+            }
+        }
+
+
+        for (int j = 0; j < 3; j++) {
+            if (tabla[0][j] == Igrač && tabla[1][j] == Igrač && tabla[2][j] == Igrač) {
+                return true;
+            }
+        }
+
+
+        if (tabla[0][0] == Igrač && tabla[1][1] == Igrač && tabla[2][2] == Igrač) {
+            return true;
+        }
+
+        if (tabla[0][2] == Igrač && tabla[1][1] == Igrač && tabla[2][0] == Igrač) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void Igraj() {
+        Scanner scanner = new Scanner(System.in);
+        boolean krajIgre = false;
+
+        System.out.println("Početak igre!");
+        System.out.println("Igrač 1: X");
+        System.out.println("Igrač 2: O");
+        System.out.println();
+
+        while (!krajIgre) {
+            System.out.println("Trenutna tabla:");
+            printTabela();
+
+            System.out.println("Igrač " + Igrač + ", unesi svoj korak (red[0-2] kolona[0-2]): ");
+            int red = scanner.nextInt();
+            int kolona = scanner.nextInt();
+
+            if (red < 0 || red >= 3 || kolona < 0 || kolona >= 3 || tabla[red][kolona] != '-') {
+                System.out.println("Nemoguć korak! Pokušaj ponovo.");
+                continue;
+            }
+
+            tabla[red][kolona] = Igrač;
+
+            if (provjeriPobjedu(Igrač)) {
+                System.out.println("Igrač " + Igrač + " je pobijedio!");
+                krajIgre = true;
+            } else if (TabelaPuna()) {
+                System.out.println("Neriješeno!");
+                krajIgre = true;
+            } else {
+                Igrač = (Igrač == 'X') ? 'O' : 'X';
+            }
+
+            System.out.println();
+        }
+
+        System.out.println("Završna tabla:");
+        printTabela();
+        System.out.println("Kraj igre.");
+
+        scanner.close();
+    }
+
+    public static void main(String[] args) {
+        TicTacToe igra = new TicTacToe();
+        igra.Igraj();
+    }
+}
